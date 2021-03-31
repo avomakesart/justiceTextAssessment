@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Header } from './components/Header/Header';
-import TextItem from './components/TextItem/TextItem';
-import './App.css';
-import { Input } from './components/Input/Input';
+import { Card, Header, Input, Pagination, TextItem } from './components';
+import 'animate.css';
 
 // const DATA_SIZE_HALF = "half"
 const DATA_SIZE_FULL = 'full';
@@ -13,6 +11,12 @@ function App() {
   const [data, setData] = useState([]);
   const [value, setValue] = useState(0);
   const [searchInput, setSearchInput] = useState('');
+
+  // Pagination State
+  const [offset, setOffset] = useState(0);
+  const [pageCount, setPageCount] = useState(9);
+
+  const dataPerPage = 10;
 
   /** DO NOT CHANGE THE FUNCTION BELOW */
   useEffect(() => {
@@ -29,53 +33,64 @@ function App() {
       let list = await response.json();
 
       let dataItems = await Promise.all(
-        list.map(async (id) => {
+        list.slice(offset, offset + dataPerPage).map(async (id) => {
           return (await fetch('/api/dataItem/' + id)).json();
         })
       );
       setData(dataItems);
+      setPageCount(Math.ceil(list.length));
     };
 
     fetchData();
-  }, []);
+  }, [offset]);
 
+  // Handlers
   const handleChange = (e) => {
     setSearchInput(e.target.value);
   };
 
+  const handlePageChange = (e) => {
+    const selectedPage = e.selected;
+    setOffset(selectedPage + 1);
+  };
+
   return (
-    <div className='App'>
+    <div className='text-center pb-8'>
       <Header title='JT Online Book'>
-        <div>
+        <div className='flex flex-row'>
           <Input
             type='text'
-            placeholder='Search text'
+            placeholder='Type a search'
             value={searchInput}
             onChange={handleChange}
             hasIcon
           />
         </div>
       </Header>
-      {data.map((row, i) => {
-        return (
-          <p key={`p${i}`}>
-            {row.map((textitem, j) => {
-              if (
-                searchInput.length > 0 &&
-                textitem.text.search(searchInput) === -1
-              ) {
-                return null;
-              }
+      <div className='container mx-auto pt-10 px-8 md:px-6 lg:px-4 text-left'>
+        <Card>
+          {data.map((row, i) => {
+            return (
+              <div className='animate__animated animate__fadeIn' key={`p${i}`}>
+                {row.map((textitem, j) => {
+                  if (
+                    searchInput.length > 0 &&
+                    textitem.text.search(searchInput) === -1
+                  ) {
+                    return null;
+                  }
 
-              return (
-                <>
-                  <TextItem key={`${i}${j}`} value={value} data={textitem} />
-                </>
-              );
-            })}
-          </p>
-        );
-      })}
+                  return (
+                    <TextItem key={`${i}${j}`} value={value} data={textitem} />
+                  );
+                })}
+              </div>
+            );
+          })}
+        </Card>
+
+        <Pagination pageCount={pageCount} handlePageChange={handlePageChange} />
+      </div>
     </div>
   );
 }

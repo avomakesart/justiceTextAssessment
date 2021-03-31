@@ -16,13 +16,10 @@ app.get('/api/dataIdList', (req, res) => {
   }
 
   if (req.query.datasize === DATA_SIZE_HALF) {
-    console.log('halfList: ', data.rowIdHalfList);
     res.send(data.rowIdHalfList);
   } else if (req.query.datasize === DATA_SIZE_FULL) {
-    console.log('fullList: ', data.rowIdFullList);
     res.send(data.rowIdFullList);
   } else {
-    console.log('else', data.rows['row' + req.query.datasize]);
     res.send(data.rows['row' + req.query.datasize]);
   }
 });

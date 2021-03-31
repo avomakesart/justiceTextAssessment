@@ -2,15 +2,24 @@ import React from 'react';
 
 export const Header = ({ children, title }) => {
   return (
-    <section className='text-gray-700 body-font'>
-      <div className='container px-8 mx-auto pt-16 lg:px-4'>
-        <div className='flex flex-col w-full mx-auto mb-12 text-left lg:w-2/3 lg:text-center'>
-          <h1 className='mb-6 text-2xl font-semibold tracking-tighter text-black sm:text-5xl title-font'>
-            {title}
-          </h1>
-        </div>
-        {children}
+    <header className='text-gray-600 body-font border-gray-200 border-b'>
+      <div className='container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center'>
+        <a
+          href='/'
+          className='flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0'
+        >
+          <img
+            className='w-10 h-10 text-white p-2 border border-black bg-transparent rounded'
+            src='https://miro.medium.com/max/3150/1*SGHZCg-jkIDpMUZkdaX2Vw.png'
+            alt='justice text'
+          />
+
+          <span className='ml-3 text-xl'> {title}</span>
+        </a>
+        <nav className='md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center'>
+          {children}
+        </nav>
       </div>
-    </section>
+    </header>
   );
 };
