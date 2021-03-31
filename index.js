@@ -2,7 +2,7 @@ const express = require('express');
 
 const app = express();
 const http = require('http').createServer(app);
-const port = process.env.PORT || 7000;
+const port = process.env.PORT || 8080;
 
 const data = require('./data.json');
 
